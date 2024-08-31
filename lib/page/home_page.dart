@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../data/expanse_data.dart';
 import '../models/expense_item.dart';
 import '../components/expense_tile.dart';
+import '../components/expense_summary.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -61,27 +63,33 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<ExpenseData>(
       builder: (context, expenseData, child) => Scaffold(
-        backgroundColor: Colors.grey[300],
-        floatingActionButton: FloatingActionButton(
-          onPressed: addNewExpense,
-          child: Icon(Icons.add),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
+          backgroundColor: Colors.grey[300],
+          floatingActionButton: FloatingActionButton(
+            onPressed: addNewExpense,
+            backgroundColor: Colors.black,
+            child: const Icon(Icons.add),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
-        ),
-        body: ListView(children: [
-          ListView.builder(
-          shrinkWrap: true,
-          physics:const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => ExpenseTile(
-            name: expenseData.getAllExpenseList()[index].name,
-            amount: expenseData.getAllExpenseList()[index].amount,
-            dateTime: expenseData.getAllExpenseList()[index].dateTime,
-          ),
-          itemCount: expenseData.getAllExpenseList().length,
-        ),
-        ],)
-      ),
+          body: ListView(
+            children: [
+              ExpenseSummary(
+                startOfWeek: expenseData.startOfWeekDate(),
+              ),
+              const SizedBox(height: 20),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) => ExpenseTile(
+                  name: expenseData.getAllExpenseList()[index].name,
+                  amount: expenseData.getAllExpenseList()[index].amount,
+                  dateTime: expenseData.getAllExpenseList()[index].dateTime,
+                ),
+                itemCount: expenseData.getAllExpenseList().length,
+              ),
+            ],
+          )),
     );
   }
 }
