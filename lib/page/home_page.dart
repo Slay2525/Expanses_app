@@ -69,7 +69,10 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(25),
           ),
         ),
-        body: ListView.builder(
+        body: ListView(children: [
+          ListView.builder(
+          shrinkWrap: true,
+          physics:const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => ExpenseTile(
             name: expenseData.getAllExpenseList()[index].name,
             amount: expenseData.getAllExpenseList()[index].amount,
@@ -77,6 +80,7 @@ class _HomePageState extends State<HomePage> {
           ),
           itemCount: expenseData.getAllExpenseList().length,
         ),
+        ],)
       ),
     );
   }
