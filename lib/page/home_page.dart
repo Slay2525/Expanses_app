@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/expanse_data.dart';
 import '../models/expense_item.dart';
-
+import '../components/expense_tile.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -44,10 +44,17 @@ class _HomePageState extends State<HomePage> {
     );
     Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
     Navigator.pop(context);
+    clear();
   }
 
   void cancel() {
     Navigator.pop(context);
+    clear();
+  }
+
+  void clear() {
+    newExpanseAmountController.clear();
+    newExpanseNameController.clear();
   }
 
   @override
@@ -62,8 +69,12 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(25),
           ),
         ),
-             body: ListView.builder(
-          itemBuilder: (context, index) => ListTile(title: Text(expenseData.getAllExpenseList()[index].name)),
+        body: ListView.builder(
+          itemBuilder: (context, index) => ExpenseTile(
+            name: expenseData.getAllExpenseList()[index].name,
+            amount: expenseData.getAllExpenseList()[index].amount,
+            dateTime: expenseData.getAllExpenseList()[index].dateTime,
+          ),
           itemCount: expenseData.getAllExpenseList().length,
         ),
       ),
