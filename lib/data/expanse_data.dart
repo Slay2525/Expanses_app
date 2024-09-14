@@ -1,21 +1,31 @@
+import 'package:expense_app/data/hive_database.dart';
 import 'package:expense_app/models/expense_item.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_app/dataTime/data_time_helper.dart';
+
 
 class ExpenseData extends ChangeNotifier{
   List<ExpenseItem> overallExpenseList = [];
   List<ExpenseItem> getAllExpenseList() {
     return overallExpenseList;
   }
+final db =  HiveDatabase();
+  void prepareData(){
+if (db.readData().isNotEmpty){
+  overallExpenseList = db.readData();
+}
+  }
 
   void addNewExpense(ExpenseItem newExpense) {
     overallExpenseList.add(newExpense);
     notifyListeners();
+    db.saveData(overallExpenseList);
   }
 
   void deleteExpense(ExpenseItem expenseToDelete) {
     overallExpenseList.remove(expenseToDelete);
     notifyListeners();
+     db.saveData(overallExpenseList);
   }
 
   String getDayName(DateTime dateTime) {

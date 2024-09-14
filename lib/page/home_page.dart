@@ -16,6 +16,11 @@ class _HomePageState extends State<HomePage> {
   TextEditingController newExpanseDollarController = TextEditingController();
   TextEditingController newExpanseNameController = TextEditingController();
   TextEditingController newExpanseCentsController = TextEditingController();
+  @override
+  void initState(){
+    super.initState();
+    Provider.of<ExpenseData>(context, listen: false).prepareData();
+  }
   void addNewExpense() {
     showDialog(
       context: context,
@@ -35,6 +40,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                   child: TextField(
                     controller: newExpanseDollarController,
+                    keyboardType: TextInputType.number,
                        decoration: const InputDecoration(
                 hintText: 'Dollars'
               ),
@@ -44,6 +50,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                   child: TextField(
                     controller: newExpanseCentsController,
+                    keyboardType: TextInputType.number,
                        decoration: const InputDecoration(
                 hintText: 'Cents'
               ),
@@ -59,6 +66,10 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  void deleteExpense(ExpenseItem expense){
+    Provider.of<ExpenseData>(context,listen: false).deleteExpense(expense);
   }
 
   void save() {
@@ -115,6 +126,7 @@ class _HomePageState extends State<HomePage> {
                   name: expenseData.getAllExpenseList()[index].name,
                   amount: expenseData.getAllExpenseList()[index].amount,
                   dateTime: expenseData.getAllExpenseList()[index].dateTime,
+                  deleteTapped: (p0) => deleteExpense(expenseData.getAllExpenseList()[index]),
                 ),
                 itemCount: expenseData.getAllExpenseList().length,
               ),

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'page/home_page.dart';
 import 'data/expanse_data.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async{
+  await Hive.initFlutter();
+  await Hive.openBox('expense_database');
   runApp(const MyApp());
 }
 
