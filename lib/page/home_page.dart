@@ -13,8 +13,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController newExpanseAmountController = TextEditingController();
+  TextEditingController newExpanseDollarController = TextEditingController();
   TextEditingController newExpanseNameController = TextEditingController();
+  TextEditingController newExpanseCentsController = TextEditingController();
   void addNewExpense() {
     showDialog(
       context: context,
@@ -25,8 +26,31 @@ class _HomePageState extends State<HomePage> {
           children: [
             TextField(
               controller: newExpanseNameController,
+              decoration: const InputDecoration(
+                hintText: 'Expense name'
+              ),
             ),
-            TextField(controller: newExpanseAmountController)
+            Row(
+              children: [
+              Expanded(
+                  child: TextField(
+                    controller: newExpanseDollarController,
+                       decoration: const InputDecoration(
+                hintText: 'Dollars'
+              ),
+                  ),
+                ),
+                SizedBox(width: 4,),
+              Expanded(
+                  child: TextField(
+                    controller: newExpanseCentsController,
+                       decoration: const InputDecoration(
+                hintText: 'Cents'
+              ),
+                  ),
+                )
+              ],
+            )
           ],
         ),
         actions: [
@@ -38,10 +62,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void save() {
+    String amount =
+        '${newExpanseDollarController.text}.${newExpanseCentsController.text}';
+
     ExpenseItem newExpense = ExpenseItem(
       name: newExpanseNameController.text,
-      amount:
-          double.parse(newExpanseAmountController.text), //Without double.parse
+          amount: double.parse(amount),
       dateTime: DateTime.now(),
     );
     Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
@@ -55,7 +81,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void clear() {
-    newExpanseAmountController.clear();
+    newExpanseDollarController.clear();
+    newExpanseCentsController.clear();
     newExpanseNameController.clear();
   }
 
@@ -67,7 +94,10 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             onPressed: addNewExpense,
             backgroundColor: Colors.black,
-            child: const Icon(Icons.add),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),
